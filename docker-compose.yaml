@@ -1,0 +1,59 @@
+networks:
+  labnet:
+    name: labnet
+
+services:
+
+  s1:
+    build:
+      context: .
+      dockerfile: DockerfileS1.dev
+    container_name: S1
+    hostname: S1
+    networks: [labnet]
+    ports:
+    - "2222:22" 
+
+
+  c1:
+    build:
+      context: .
+      dockerfile: DockerfileC1.dev
+    container_name: C1
+    hostname: C1
+    networks: [labnet]
+    depends_on: [s1]
+    command: ["sleep", "infinity"]
+
+
+  c2:
+    build:
+      context: .
+      dockerfile: DockerfileC2.dev
+    container_name: C2
+    hostname: C2
+    networks: [labnet]
+    depends_on: [s1]
+    command: ["sleep", "infinity"]
+
+
+  c3:
+    build:
+      context: .
+      dockerfile: DockerfileC3.dev
+    container_name: C3
+    hostname: C3
+    networks: [labnet]
+    depends_on: [s1]
+    command: ["sleep", "infinity"]
+
+
+  c4:
+    build:
+      context: .
+      dockerfile: DockerfileC4.dev
+    container_name: C4
+    hostname: C4
+    networks: [labnet]
+    depends_on: [s1]
+    command: ["sleep", "infinity"]

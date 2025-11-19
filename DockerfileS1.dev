@@ -1,0 +1,26 @@
+FROM ubuntu:22.10
+
+
+RUN printf "deb http://old-releases.ubuntu.com/ubuntu/ kinetic main universe multiverse restricted\n\
+deb http://old-releases.ubuntu.com/ubuntu/ kinetic-updates main universe multiverse restricted\n\
+deb http://old-releases.ubuntu.com/ubuntu/ kinetic-security main universe multiverse restricted\n" > /etc/apt/sources.list \
+&& apt-get update \
+&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+openssh-server openssh-client ca-certificates locales \
+&& rm -rf /var/lib/apt/lists/*
+
+
+RUN sed -ri 's/^#?PasswordAuthentication\s+.*/PasswordAuthentication yes/' /etc/ssh/sshd_config \
+&& sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin no/' /etc/ssh/sshd_config \
+&& mkdir -p /var/run/sshd
+
+
+RUN useradd -m -s /bin/bash prueba \
+&& echo 'prueba:prueba' | chpasswd \
+&& echo 'LANG=es_CL.UTF-8' > /etc/default/locale
+
+
+EXPOSE 22
+
+
+CMD ["/usr/sbin/sshd", "-D", "-e"]

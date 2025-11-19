@@ -1,0 +1,16 @@
+FROM ubuntu:14.04
+
+
+RUN printf "deb http://archive.ubuntu.com/ubuntu trusty main universe multiverse restricted\n\
+deb http://archive.ubuntu.com/ubuntu trusty-updates main universe multiverse restricted\n\
+deb http://security.ubuntu.com/ubuntu trusty-security main\n" \
+> /etc/apt/sources.list
+
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        openssh-client \
+        tcpdump \
+        ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+CMD ["sleep", "infinity"]
